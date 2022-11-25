@@ -77,13 +77,13 @@ variable "price_class" {
 variable "origin_ssl_protocols" {
   description = "The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS. A list of one or more  of SSLv3, TLSv1, TLSv1.1, and TLSv1.2."
   default     = ["TLSv1.2", "TLSv1.1"]
-  type        = "list"
+  type        = list
 }
 
 variable "minimum_protocol_version" {
   description = "The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections."
   default     = "TLSv1.1_2016"
-  type        = "string"
+  type        = string
 }
 
 # variable "acm_certificate_arn" {}
