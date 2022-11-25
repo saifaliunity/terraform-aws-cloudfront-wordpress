@@ -14,7 +14,7 @@ variable "cookies_whitelisted_names" {
 }
 
 variable "cnames" {
-  description = "CNAME records which you would later add the cloudfront DNS name to it"
+  description = "(Optional) CNAME records which you would later add the cloudfront DNS name to it"
   type        = list
 }
 
