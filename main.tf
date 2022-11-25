@@ -15,7 +15,7 @@ resource "aws_cloudfront_distribution" "cdn" {
       http_port              = "${var.http_port}"
       https_port             = "${var.https_port}"
       origin_protocol_policy = "${var.origin_protocol_policy}"
-      origin_ssl_protocols   = ["${var.origin_ssl_protocols}"]
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
