@@ -1,6 +1,6 @@
 variable "cookies_whitelisted_names" {
   description = "List of cookies to be whitelisted."
-  type        = "list"
+  type        = list
 
   default = [
     "comment_author_*",
@@ -15,12 +15,12 @@ variable "cookies_whitelisted_names" {
 
 variable "cnames" {
   description = "CNAME records which you would later add the cloudfront DNS name to it"
-  type        = "list"
+  type        = list
 }
 
 variable "tags" {
   description = "Tags to identify the Cloudfront distribution"
-  type        = "map"
+  type        = map
 }
 
 variable "domain_name" {
