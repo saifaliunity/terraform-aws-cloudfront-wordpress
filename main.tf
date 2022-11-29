@@ -6,12 +6,14 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = "${var.cnames}"
   enabled = "${var.enabled}"
   tags    = "${var.tags}"
+  http_version = "http2and3"
 
   origin {
     domain_name = "${var.domain_name}"
     origin_id   = "${var.origin_id}"
-
     custom_origin_config {
+      origin_read_timeout = 60
+      origin_keepalive_timeout = 60
       http_port              = "${var.http_port}"
       https_port             = "${var.https_port}"
       origin_protocol_policy = "${var.origin_protocol_policy}"

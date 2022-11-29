@@ -82,7 +82,7 @@ variable "origin_ssl_protocols" {
 
 variable "minimum_protocol_version" {
   description = "The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections."
-  default     = "TLSv1.1_2016"
+  default     = "TLSv1.2_2021"
   type        = string
 }
 
