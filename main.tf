@@ -40,37 +40,62 @@ resource "aws_cloudfront_distribution" "cdn" {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "${var.origin_id}"
-
+    min_ttl = 0
+    default_ttl = 300
+    max_ttl = 31536000
     forwarded_values {
       query_string = true
-      headers      = ["Host", "Origin"]
+      headers      = ["Host", "Origin", "Referer"]
 
       cookies {
-        forward           = "whitelist"
-        whitelisted_names = "${var.cookies_whitelisted_names}"
+        forward           = "all"
+        # whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
 
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = "${var.min_ttl}"
-    default_ttl            = "${var.default_ttl}"
-    max_ttl                = "${var.max_ttl}"
+    # min_ttl                = "${var.min_ttl}"
+    # default_ttl            = "${var.default_ttl}"
+    # max_ttl                = "${var.max_ttl}"
   }
 
   ordered_cache_behavior {
-    path_pattern     = "wp-admin/*"
+    path_pattern     = "/wp-content/*"
+    allowed_methods  = [ "GET", "HEAD", "OPTIONS" ]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "${var.origin_id}"
+    min_ttl = 86400
+    default_ttl = 86400
+    max_ttl = 31536000
+    forwarded_values {
+      query_string = false
+      headers      = ["Origin","Access-Control-Request-Headers", "Access-Contorl-Request-Method", "Host"]
+
+      cookies {
+        forward           = "none"
+       # whitelisted_names = "${var.cookies_whitelisted_names}"
+      }
+
+    }
+
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/wp-admin/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "${var.origin_id}"
 
     forwarded_values {
       query_string = true
-      headers      = ["Host", "Origin"]
+      headers      = ["*"]
 
       cookies {
-        forward           = "whitelist"
-        whitelisted_names = "${var.cookies_whitelisted_names}"
+        forward           = "all"
+       # whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
 
@@ -79,18 +104,18 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   ordered_cache_behavior {
-    path_pattern     = "wp-login.php"
+    path_pattern     = "/wp-login.php"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "${var.origin_id}"
 
     forwarded_values {
       query_string = true
-      headers      = ["Host", "Origin"]
+      headers      = ["*"]
 
       cookies {
-        forward           = "whitelist"
-        whitelisted_names = "${var.cookies_whitelisted_names}"
+        forward           = "all"
+        #whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
 
