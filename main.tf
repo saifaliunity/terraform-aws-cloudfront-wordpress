@@ -21,7 +21,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
     origin_shield = {
       enabled              = true
-      origin_shield_region = "eu-west-2"
+      origin_shield_region = "ap-south-1"
     }
   }
 
