@@ -18,11 +18,12 @@ resource "aws_cloudfront_distribution" "cdn" {
       https_port               = var.https_port
       origin_protocol_policy   = var.origin_protocol_policy
       origin_ssl_protocols     = ["TLSv1.2"]
+      origin_shield = {
+        enabled              = true
+        origin_shield_region = "ap-south-1"
+      }
     }
-    origin_shield = {
-      enabled              = true
-      origin_shield_region = "ap-south-1"
-    }
+
   }
 
   price_class = var.price_class
