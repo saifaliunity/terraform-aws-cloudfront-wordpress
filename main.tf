@@ -3,25 +3,29 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "cdn" {
-  aliases = "${var.cnames}"
-  enabled = "${var.enabled}"
-  tags    = "${var.tags}"
+  aliases      = var.cnames
+  enabled      = var.enabled
+  tags         = var.tags
   http_version = "http2and3"
 
   origin {
-    domain_name = "${var.domain_name}"
-    origin_id   = "${var.origin_id}"
+    domain_name = var.domain_name
+    origin_id   = var.origin_id
     custom_origin_config {
-      origin_read_timeout = 60
+      origin_read_timeout      = 60
       origin_keepalive_timeout = 60
-      http_port              = "${var.http_port}"
-      https_port             = "${var.https_port}"
-      origin_protocol_policy = "${var.origin_protocol_policy}"
-      origin_ssl_protocols   = ["TLSv1.2"]
+      http_port                = var.http_port
+      https_port               = var.https_port
+      origin_protocol_policy   = var.origin_protocol_policy
+      origin_ssl_protocols     = ["TLSv1.2"]
+    }
+    origin_shield = {
+      enabled              = true
+      origin_shield_region = "eu-west-2"
     }
   }
 
-  price_class = "${var.price_class}"
+  price_class = var.price_class
 
   restrictions {
     geo_restriction {
@@ -31,24 +35,24 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   viewer_certificate {
     cloudfront_default_certificate = false
-    acm_certificate_arn            = "${var.acm_certificate_arn}"
+    acm_certificate_arn            = var.acm_certificate_arn
     ssl_support_method             = "sni-only"
-    minimum_protocol_version       = "${var.minimum_protocol_version}"
+    minimum_protocol_version       = var.minimum_protocol_version
   }
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.origin_id}"
-    min_ttl = 0
-    default_ttl = 300
-    max_ttl = 31536000
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = var.origin_id
+    min_ttl          = 0
+    default_ttl      = 300
+    max_ttl          = 31536000
     forwarded_values {
       query_string = true
       headers      = ["Host", "Origin", "Referer"]
 
       cookies {
-        forward           = "all"
+        forward = "all"
         # whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
@@ -62,19 +66,19 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   ordered_cache_behavior {
     path_pattern     = "/wp-content/*"
-    allowed_methods  = [ "GET", "HEAD", "OPTIONS" ]
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.origin_id}"
-    min_ttl = 86400
-    default_ttl = 86400
-    max_ttl = 31536000
+    target_origin_id = var.origin_id
+    min_ttl          = 86400
+    default_ttl      = 86400
+    max_ttl          = 31536000
     forwarded_values {
       query_string = false
-      headers      = ["Origin","Access-Control-Request-Headers", "Access-Contorl-Request-Method", "Host"]
+      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Contorl-Request-Method", "Host"]
 
       cookies {
-        forward           = "none"
-       # whitelisted_names = "${var.cookies_whitelisted_names}"
+        forward = "none"
+        # whitelisted_names = "${var.cookies_whitelisted_names}"
       }
 
     }
@@ -87,15 +91,15 @@ resource "aws_cloudfront_distribution" "cdn" {
     path_pattern     = "/wp-admin/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.origin_id}"
+    target_origin_id = var.origin_id
 
     forwarded_values {
       query_string = true
       headers      = ["*"]
 
       cookies {
-        forward           = "all"
-       # whitelisted_names = "${var.cookies_whitelisted_names}"
+        forward = "all"
+        # whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
 
@@ -107,14 +111,14 @@ resource "aws_cloudfront_distribution" "cdn" {
     path_pattern     = "/wp-login.php"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.origin_id}"
+    target_origin_id = var.origin_id
 
     forwarded_values {
       query_string = true
       headers      = ["*"]
 
       cookies {
-        forward           = "all"
+        forward = "all"
         #whitelisted_names = "${var.cookies_whitelisted_names}"
       }
     }
