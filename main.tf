@@ -9,11 +9,11 @@ resource "aws_cloudfront_distribution" "cdn" {
   http_version = "http2and3"
 
   origin {
-    origin_shield = {
+    origin_shield {
       enabled              = true
       origin_shield_region = "ap-south-1"
     }
-    
+
     domain_name = var.domain_name
     origin_id   = var.origin_id
     custom_origin_config {
