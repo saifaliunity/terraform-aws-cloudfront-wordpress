@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     domain_name = var.domain_name
     origin_id   = var.origin_id
     custom_origin_config {
-      origin_read_timeout      = 60
+      origin_read_timeout      = 179
       origin_keepalive_timeout = 60
       http_port                = var.http_port
       https_port               = var.https_port
